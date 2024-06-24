@@ -131,3 +131,7 @@ Loaded backend 1: OpenMP
 ```
 
 We successfully built and compiled AdaptiveCpp !!! We can use it to compile our applications.
+
+# Acknowledgements
+
+ - [SYCL: A Portable Alternative to CUDA](https://chsasank.com/sycl-portable-cuda-alternative.html)
