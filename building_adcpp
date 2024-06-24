@@ -1,0 +1,51 @@
+1) DOCKER INSTALLATION
+
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo docker run hello-world 
+
+2) NVIDIA CONTAINER TOOLKIT
+
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt update
+sudo apt install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+
+sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi
+
+3) CONTAINER CREATION
+
+docker run -it --gpus all --runtime=nvidia --name test nvidia/cuda:11.6.1-devel-ubuntu20.04
+docker exec -it test /bin/bash
+nvidia-smi
+
+4) ENVIRONMENT VARIABLES
+export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+
+5) INTALLATION OF DEPENDENCIES
+apt update && apt install -y sudo
+sudo apt update && sudo apt install -y lsb-release wget software-properties-common gnupg
+sudo apt install -y python3 cmake libboost-all-dev git build-essential
+
+6) LLVM INSTALLATION
+wget https://apt.llvm.org/llvm.sh #Convenience script that sets up the repositories
+chmod +x llvm.sh
+sudo ./llvm.sh 16 #Set up repositories for clang 16
+sudo apt update && sudo apt install -y libclang-16-dev clang-tools-16 libomp-16-dev llvm-16-dev lld-16
+
+
+7) INSTALLING AND BUILDING ADAPTIVE CPP
+git clone https://github.com/AdaptiveCpp/AdaptiveCpp
+cd AdaptiveCpp
+mkdir build && cd build
+cmake -DWITH_CUDA_BACKEND=ON ..
+make install
