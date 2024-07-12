@@ -1,4 +1,3 @@
-
 # Building AdaptiveCpp with LLVM, Docker and Nvidia Container Toolkit on Ubuntu
 
 ## AdaptiveCpp
